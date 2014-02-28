@@ -594,6 +594,8 @@ NSUInteger DeviceSystemMajorVersion() {
     
     _stepValueInternal= _stepValueContinuously ? _stepValue : 0.0f;
     
+    [self sendActionsForControlEvents:UIControlEventTouchDown];
+    
     return YES;
 }
 
@@ -674,6 +676,24 @@ NSUInteger DeviceSystemMajorVersion() {
     }
     
     [self sendActionsForControlEvents:UIControlEventValueChanged];
+    [self sendActionsForControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)cancelTrackingWithEvent:(UIEvent *)event
+{
+    _lowerHandle.highlighted = NO;
+    _upperHandle.highlighted = NO;
+    
+    if(_stepValue>0)
+    {
+        _stepValueInternal=_stepValue;
+        
+        [self setLowerValue:_lowerValue animated:YES];
+        [self setUpperValue:_upperValue animated:YES];
+    }
+    
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
+    [self sendActionsForControlEvents:UIControlEventTouchCancel];
 }
 
 @end
